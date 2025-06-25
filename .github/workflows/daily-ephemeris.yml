@@ -2,8 +2,8 @@ name: Generar Efeméride Diaria
 
 on:
   schedule:
-    # Ejecutar todos los días a las 9:00 UTC (10:00 CET / 11:00 CEST)
-    - cron: "0 9 * * *"
+    # Ejecutar todos los días a las 00:00 UTC (medianoche)
+    - cron: "0 0 * * *"
 
   # Permitir ejecución manual
   workflow_dispatch:

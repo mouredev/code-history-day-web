@@ -1,0 +1,25 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Fondo del terminal -->
+    <rect width="32" height="32" rx="4" fill="#000000" />
+    <rect x="1" y="1" width="30" height="30" rx="3" fill="#0a0a0a" stroke="#22c55e"
+        stroke-width="0.5" opacity="0.3" />
+
+    <!-- Líneas de código simuladas -->
+    <rect x="4" y="6" width="8" height="1.5" rx="0.5" fill="#22c55e" opacity="0.6" />
+    <rect x="4" y="9" width="12" height="1.5" rx="0.5" fill="#22c55e" opacity="0.4" />
+    <rect x="4" y="12" width="6" height="1.5" rx="0.5" fill="#22c55e" opacity="0.6" />
+
+    <!-- Prompt del terminal -->
+    <rect x="4" y="18" width="2" height="1.5" rx="0.5" fill="#22c55e" />
+    <rect x="7" y="18" width="1" height="1.5" rx="0.5" fill="#22c55e" opacity="0.8" />
+
+    <!-- Cursor parpadeante -->
+    <rect x="9" y="18" width="1.5" height="1.5" rx="0.2" fill="#22c55e">
+        <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite" />
+    </rect>
+
+    <!-- Detalles adicionales -->
+    <circle cx="6" cy="4" r="0.8" fill="#22c55e" opacity="0.3" />
+    <circle cx="9" cy="4" r="0.8" fill="#22c55e" opacity="0.3" />
+    <circle cx="12" cy="4" r="0.8" fill="#22c55e" opacity="0.3" />
+</svg> 

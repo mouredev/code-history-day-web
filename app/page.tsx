@@ -312,14 +312,14 @@ ${formattedEphemeris.event}`
               </div>
 
             {/* Footer with Subtle Glow */}
-            <div className="mt-8 text-green-600 text-xs backdrop-blur-sm bg-black/10 rounded-lg p-4">
+            <div className="mt-8 text-green-600 text-xs backdrop-blur-sm bg-black/10 rounded-lg p-2">
               {/* Interactive Terminal */}
               <div 
-                className="text-green-500 mb-4 backdrop-blur-sm bg-black/10 rounded p-2 text-base cursor-text text-left"
+                className="text-green-500 mb-4 backdrop-blur-sm bg-black/10 rounded text-base cursor-text"
                 onClick={handleTerminalClick}
               >
                                 <div className="flex items-center">
-                  <span className="font-bold whitespace-nowrap">user@mouredev:~$</span>
+                  <span className="font-bold whitespace-nowrap text-green-500">user@mouredev:~$</span>
                   <div className="ml-2 flex-1 relative">
                     <div className="relative">
                       <div className="text-green-300 font-mono whitespace-nowrap overflow-hidden max-w-full">

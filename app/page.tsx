@@ -136,11 +136,16 @@ ${formattedEphemeris.event}`
     if (!todayEphemeris) return
 
     const formattedEphemeris = formatEphemerisForDisplay(todayEphemeris)
-    const tweetText = `🗓️ Efeméride sobre programación del día ${formattedEphemeris.date}
+    
+    // Truncar solo el evento a 200 caracteres si es necesario
+    let eventText = formattedEphemeris.event
+    if (eventText.length > 200) {
+      eventText = eventText.substring(0, 197) + '...'
+    }
+    
+    const tweetText = `💻 ${eventText}
 
-💻 ${formattedEphemeris.event}
-
-ℹ️ Cada día una nueva en:`
+ℹ️ Cada día una nueva efeméride en `
     
     const url = window.location.href
     const xUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(url)}`
@@ -239,19 +244,19 @@ ${formattedEphemeris.event}`
             {/* System Info with Glow Effect */}
             <div className="text-green-400 text-sm space-y-1 backdrop-blur-sm bg-black/10 rounded-lg p-4 border border-green-500/10">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span className="w-2 h-2 min-w-[8px] min-h-[8px] bg-green-500 rounded-full animate-pulse flex-shrink-0"></span>
                 Iniciando sistema de efemérides de programación...
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                <span className="w-2 h-2 min-w-[8px] min-h-[8px] bg-green-500 rounded-full flex-shrink-0"></span>
                 Conectando con la base de datos... <span className="text-green-300 font-bold">[OK]</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                <span className="w-2 h-2 min-w-[8px] min-h-[8px] bg-green-500 rounded-full flex-shrink-0"></span>
                 Cargando datos históricos... <span className="text-green-300 font-bold">[OK]</span>
               </div>
               <div className="flex items-center gap-2 text-green-300">
-                <span className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></span>
+                <span className="w-2 h-2 min-w-[8px] min-h-[8px] bg-green-300 rounded-full animate-pulse flex-shrink-0"></span>
                 Sistema listo. Descubre la historia de la programación día a día.
               </div>
             </div>
@@ -263,8 +268,8 @@ ${formattedEphemeris.event}`
             </div>
 
             {/* Today's Date with Glass Effect */}
-            <div className="flex items-center gap-2 text-green-300 backdrop-blur-md bg-black/20 rounded-lg p-3 border border-green-500/20">
-              <Calendar className="w-4 h-4 animate-pulse" />
+            <div className="flex items-start gap-2 text-green-300 backdrop-blur-md bg-black/20 rounded-lg p-3 border border-green-500/20">
+              <Calendar className="w-4 h-4 min-w-[16px] min-h-[16px] animate-pulse flex-shrink-0 mt-0.5" />
               <span className="font-light">
                 Fecha actual:{" "}
                 <span className="font-normal text-green-200">
@@ -279,32 +284,32 @@ ${formattedEphemeris.event}`
             </div>
 
             {/* Ephemeris Content with Enhanced Glass Effect */}
-            <div className="backdrop-blur-md bg-gradient-to-br from-gray-900/40 to-black/60 border border-green-500/30 rounded-xl p-6 mt-6 shadow-2xl shadow-green-500/10">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2 text-green-300">
-                  <Code className="w-5 h-5 animate-pulse" />
+                          <div className="backdrop-blur-md bg-gradient-to-br from-gray-900/40 to-black/60 border border-green-500/30 rounded-xl p-6 mt-6 shadow-2xl shadow-green-500/10">
+                <div className="flex items-start gap-2 text-green-300 mb-4">
+                  <Code className="w-5 h-5 min-w-[20px] min-h-[20px] animate-pulse flex-shrink-0 mt-0.5" />
                   <span className="font-bold text-lg bg-gradient-to-r from-green-300 to-emerald-300 bg-clip-text text-transparent">
                     EFEMÉRIDE DEL DÍA
                   </span>
                 </div>
+
+                {renderEphemerisContent()}
                 
                 {/* Botón de compartir en X */}
                 {todayEphemeris && !isLoading && (
-                  <button
-                    onClick={handleShareX}
-                    className="flex items-center gap-2 px-3 py-2 bg-green-500/20 hover:bg-green-500/30 border border-green-400/30 hover:border-green-400/50 rounded-lg transition-all duration-200 group backdrop-blur-sm"
-                    title="Compartir en X"
-                  >
-                    <XLogo className="text-green-400 group-hover:text-green-300" size={16} />
-                    <span className="text-green-400 group-hover:text-green-300 text-sm font-medium">
-                      Compartir
-                    </span>
-                  </button>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      onClick={handleShareX}
+                      className="flex items-center gap-2 px-3 py-2 bg-green-500/20 hover:bg-green-500/30 border border-green-400/30 hover:border-green-400/50 rounded-lg transition-all duration-200 group backdrop-blur-sm"
+                      title="Compartir en X"
+                    >
+                      <XLogo className="text-green-400 group-hover:text-green-300" size={16} />
+                      <span className="text-green-400 group-hover:text-green-300 text-sm font-medium">
+                        Compartir
+                      </span>
+                    </button>
+                  </div>
                 )}
               </div>
-
-              {renderEphemerisContent()}
-            </div>
 
             {/* Footer with Subtle Glow */}
             <div className="mt-8 text-green-600 text-xs backdrop-blur-sm bg-black/10 rounded-lg p-4">

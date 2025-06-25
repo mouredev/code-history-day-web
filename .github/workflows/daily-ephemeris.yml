@@ -12,11 +12,6 @@ on:
         description: "Fecha específica (YYYY-MM-DD) - opcional"
         required: false
         type: string
-      force:
-        description: "Forzar generación aunque ya exista"
-        required: false
-        type: boolean
-        default: false
 
 jobs:
   generate-ephemeris:
@@ -33,21 +28,13 @@ jobs:
           cache: "npm"
 
       - name: Instalar dependencias
-        run: npm ci
-
-      - name: Verificar script existe
-        run: |
-          if [ ! -f "scripts/generate-daily-ephemeris.js" ]; then
-            echo "❌ Script no encontrado"
-            exit 1
-          fi
-          echo "✅ Script encontrado"
+        run: npm install --legacy-peer-deps
 
       - name: Generar efeméride
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://amtjsuwxolyyhxhddvbe.supabase.co' }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         run: |
           echo "🚀 Iniciando generación de efeméride..."
 
@@ -59,160 +46,4 @@ jobs:
             node scripts/generate-daily-ephemeris.js
           fi
 
-      - name: Verificar resultado
-        if: always()
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "✅ Efeméride generada exitosamente"
-            echo "EPHEMERIS_STATUS=success" >> $GITHUB_ENV
-          else
-            echo "❌ Error generando efeméride"
-            echo "EPHEMERIS_STATUS=failed" >> $GITHUB_ENV
-          fi
-
-  # Job adicional para verificar la salud del sistema
-  health-check:
-    runs-on: ubuntu-latest
-    needs: generate-ephemeris
-    if: always()
-
-    steps:
-      - name: Verificar estado de Supabase
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: |
-          echo "🔍 Verificando conectividad con Supabase..."
-
-          if [ -z "$SUPABASE_ANON_KEY" ]; then
-            echo "⚠️  SUPABASE_ANON_KEY no configurada, saltando verificación"
-            exit 0
-          fi
-
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "apikey: $SUPABASE_ANON_KEY" \
-            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
-            "$SUPABASE_URL/rest/v1/ephemerides?select=count" || echo "000")
-
-          if [ "$response" = "200" ]; then
-            echo "✅ Supabase está funcionando correctamente"
-          else
-            echo "❌ Problema con Supabase (HTTP $response)"
-            exit 1
-          fi
-
-      - name: Verificar OpenAI (si está configurado)
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          echo "🔍 Verificando conectividad con OpenAI..."
-
-          if [ -z "$OPENAI_API_KEY" ]; then
-            echo "⚠️  OPENAI_API_KEY no configurada, saltando verificación"
-            exit 0
-          fi
-
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $OPENAI_API_KEY" \
-            "https://api.openai.com/v1/models" || echo "000")
-
-          if [ "$response" = "200" ]; then
-            echo "✅ OpenAI está funcionando correctamente"
-          else
-            echo "❌ Problema con OpenAI (HTTP $response)"
-            # No fallar el job por esto, solo advertir
-            echo "⚠️  Continúando de todas formas..."
-          fi
-
-  # Job para crear un issue si falla repetidamente
-  create-issue-on-failure:
-    runs-on: ubuntu-latest
-    needs: [generate-ephemeris, health-check]
-    if: failure() && github.event_name == 'schedule'
-
-    steps:
-      - name: Crear issue por fallo
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const title = `🚨 Fallo en generación automática de efeméride - ${new Date().toISOString().split('T')[0]}`;
-            const body = `
-            ## Problema detectado
-
-            El workflow de generación automática de efemérides ha fallado en la ejecución programada.
-
-            **Fecha:** ${new Date().toISOString()}
-            **Workflow:** ${context.workflow}
-            **Run ID:** ${context.runId}
-
-            ## Posibles causas
-
-            - 🔑 Problema con las API keys (OpenAI o Supabase)
-            - 🌐 Problemas de conectividad
-            - 📊 Problemas con la base de datos
-            - 🤖 Límites de rate de OpenAI
-
-            ## Acciones recomendadas
-
-            1. Verificar que las secrets estén configuradas correctamente
-            2. Revisar los logs del workflow: https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
-            3. Ejecutar manualmente el workflow para debugging
-            4. Verificar el estado de los servicios externos
-
-            ---
-
-            Este issue fue creado automáticamente por el workflow de GitHub Actions.
-            `;
-
-            // Buscar si ya existe un issue abierto similar
-            const existingIssues = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              labels: 'automated,ephemeris-failure'
-            });
-
-            if (existingIssues.data.length === 0) {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: title,
-                body: body,
-                labels: ['automated', 'ephemeris-failure', 'bug']
-              });
-              console.log('✅ Issue creado por fallo en el workflow');
-            } else {
-              console.log('ℹ️  Ya existe un issue abierto para fallos del workflow');
-            }
-
-  # Job de resumen
-  summary:
-    runs-on: ubuntu-latest
-    needs: [generate-ephemeris, health-check]
-    if: always()
-
-    steps:
-      - name: Resumen de ejecución
-        run: |
-          echo "## 📊 Resumen de Ejecución" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Fecha:** $(date -u)" >> $GITHUB_STEP_SUMMARY
-          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-
-          if [ "${{ needs.generate-ephemeris.result }}" = "success" ]; then
-            echo "**Generación:** ✅ Exitosa" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "**Generación:** ❌ Falló" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [ "${{ needs.health-check.result }}" = "success" ]; then
-            echo "**Health Check:** ✅ Exitoso" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "**Health Check:** ❌ Falló" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🔗 Enlaces útiles" >> $GITHUB_STEP_SUMMARY
-          echo "- [Ver aplicación](https://tu-dominio.vercel.app)" >> $GITHUB_STEP_SUMMARY
-          echo "- [Dashboard Supabase](https://supabase.com/dashboard)" >> $GITHUB_STEP_SUMMARY
-          echo "- [Logs del workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Proceso completado"

@@ -54,19 +54,13 @@ async function makeSupabaseRequest(endpoint: string, options: RequestInit = {}) 
 // Función para obtener la efeméride para una fecha específica
 async function getEphemerisForDate(date: string): Promise<Ephemeris | null> {
 	try {
-		console.log('🔍 Buscando efeméride para fecha:', date)
-		
 		const data = await makeSupabaseRequest(`/ephemerides?display_date=eq.${date}`)
 
-		console.log('📊 Respuesta de Supabase:', data)
-
 		if (!data || data.length === 0) {
-			console.log('❌ No se encontró efeméride para la fecha:', date)
 			return null
 		}
 
 		const ephemeris = data[0]
-		console.log('✅ Efeméride encontrada:', ephemeris)
 		return ephemeris
 	} catch (error) {
 		console.error('💥 Error en getEphemerisForDate:', error)
@@ -74,25 +68,12 @@ async function getEphemerisForDate(date: string): Promise<Ephemeris | null> {
 	}
 }
 
-// Función para obtener la efeméride para el día actual
+// Función para obtener la efeméride para el día actual (ya no se usa, mantenida por compatibilidad)
 async function getTodayEphemeris(): Promise<Ephemeris | null> {
-	const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
-	console.log('📅 Fecha de hoy calculada:', today)
 	
-	// Para testing, vamos a buscar también la fecha del 25 de junio
-	const testDate = '2025-06-25'
-	console.log('🧪 También probando con fecha de test:', testDate)
-	
-	// Primero intentar con la fecha de hoy
-	let result = await getEphemerisForDate(today)
-	
-	// Si no encuentra nada, probar con la fecha de test
-	if (!result) {
-		console.log('⚠️ No se encontró efeméride para hoy, probando fecha de test...')
-		result = await getEphemerisForDate(testDate)
-	}
-	
-	return result
+	// Fecha de fallback para testing
+	const testDate = '2025-01-01'	
+	return await getEphemerisForDate(testDate)
 }
 
 

@@ -89,7 +89,6 @@ ${formattedEphemeris.event}`
     if (e.key === 'Enter') {
       e.preventDefault() // Prevenir salto de línea
       // Aquí se pueden añadir comandos específicos en el futuro
-      console.log('Comando ejecutado:', terminalInput)
       setTerminalInput("")
       setCursorPosition(0)
     }

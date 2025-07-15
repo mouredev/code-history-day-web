@@ -91,8 +91,6 @@ async function generateEphemeris(targetDate) {
 
 Busca un evento histórico relacionado con programación, software, lenguajes, frameworks o tecnología que haya ocurrido un ${day} de ${getMonthName(month)} de cualquier año.
 
-Si no encuentras un evento exacto para esta fecha, puedes usar eventos importantes que ocurrieron cerca de esta fecha o en ${getMonthName(month)}.
-
 Responde SOLO en formato JSON:
 {
     "event": "Descripción del evento en español",
@@ -121,7 +119,7 @@ Ejemplo:
             messages: [
                 {
                     role: 'system',
-                    content: 'Eres un experto en historia de la programación y tecnología. Generas efemérides educativas sobre eventos históricos relacionados con desarrollo de software, lenguajes de programación, frameworks, empresas tecnológicas y hitos importantes en la informática. Respondes siempre en formato JSON válido.'
+                    content: 'Eres un experto en historia de la programación y tecnología. Generas efemérides educativas sobre eventos históricos relacionados con desarrollo de software, lenguajes de programación, frameworks, empresas tecnológicas y hitos importantes en la informática o el desarrollo de software. Respondes siempre en formato JSON válido.'
                 },
                 {
                     role: 'user',

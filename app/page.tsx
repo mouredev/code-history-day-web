@@ -369,9 +369,16 @@ ${formattedEphemeris.event}`
                     MoureDev by Brais Moure
                   </a>
                 </div>
-                <div className="mt-2 text-green-500/70">
-                  Desarrollado con <span className="text-red-400 animate-pulse">❤️</span> desde Galicia para el mundo
-                </div>
+                                 <div className="mt-2 text-green-500/70">
+                   <a 
+                     href="https://github.com/mouredev/code-history-day-web" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="hover:text-green-400 transition-colors duration-200 underline decoration-green-500/50 hover:decoration-green-400"
+                   >
+                     Desarrollado con <span className="text-red-400 animate-pulse">❤️</span> desde Galicia para el mundo
+                   </a>
+                 </div>
               </div>
             </div>
           </div>

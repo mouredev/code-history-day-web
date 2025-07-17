@@ -7,6 +7,12 @@ Una aplicación web que muestra cada día una efeméride histórica relacionada 
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.17-38B2AC?style=for-the-badge&logo=tailwind-css)
 ![Supabase](https://img.shields.io/badge/Supabase-Database-green?style=for-the-badge&logo=supabase)
 
+![](./flow.png)
+
+## ▶️ Tutorial en vídeo
+
+<a href="https://youtu.be/BWIhNQ-DvqY"><img src="http://i3.ytimg.com/vi/BWIhNQ-DvqY/maxresdefault.jpg" style="height: 70%; width:70%;"/></a>
+
 ## 🎯 Características
 
 - **🗓️ Efemérides Diarias**: Cada día una nueva efeméride histórica sobre programación

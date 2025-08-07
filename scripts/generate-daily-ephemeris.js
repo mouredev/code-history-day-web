@@ -115,7 +115,7 @@ Ejemplo:
                 'Content-Type': 'application/json',
             }
         }, {
-            model: 'gpt-4o',
+            model: 'gpt-5',
             messages: [
                 {
                     role: 'system',

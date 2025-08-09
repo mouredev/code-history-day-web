@@ -126,6 +126,7 @@ Ejemplo:
                     content: prompt
                 }
             ],
+            temperature: 0.2,
             max_completion_tokens: 600
         });
 

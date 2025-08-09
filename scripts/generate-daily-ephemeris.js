@@ -128,7 +128,6 @@ Ejemplo:
             ],
             verbosity: 'medium',
             reasoning_effort: 'minimal',
-            top_p: 0.9,
             max_completion_tokens: 600,
         });
 

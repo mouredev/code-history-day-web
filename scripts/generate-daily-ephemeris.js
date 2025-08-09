@@ -115,7 +115,7 @@ Ejemplo:
                 'Content-Type': 'application/json',
             }
         }, {
-            model: 'gpt-4o',
+            model: 'gpt-5',
             messages: [
                 {
                     role: 'system',
@@ -126,7 +126,9 @@ Ejemplo:
                     content: prompt
                 }
             ],
-            temperature: 0.6,
+            verbosity: 'medium',
+            reasoning_effort: 'minimal',
+            top_p: 0.9,
             max_tokens: 600,
         });
 

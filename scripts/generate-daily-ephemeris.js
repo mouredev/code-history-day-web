@@ -108,7 +108,7 @@ Ejemplo:
 }`
 
     try {
-        const response = await makeRequest('https://api.openai.com/v1/chat/completions', {
+        const response = await makeRequest('https://api.openai.com/v1/responses', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${OPENAI_API_KEY}`,
@@ -116,7 +116,7 @@ Ejemplo:
             }
         }, {
             model: 'gpt-5',
-            messages: [
+            input: [
                 {
                     role: 'system',
                     content: 'Eres un experto en historia de la programación y tecnología. Generas efemérides educativas sobre eventos históricos relacionados con desarrollo de software, lenguajes de programación, frameworks, empresas tecnológicas y hitos importantes en la informática o el desarrollo de software. Respondes siempre en formato JSON válido.'
@@ -127,8 +127,8 @@ Ejemplo:
                 }
             ],
             temperature: 0.6,
-            max_tokens: 600,
-        })
+            max_completion_tokens: 600
+        });
 
         if (response.status !== 200) {
             throw new Error(`Error de OpenAI: ${response.status} ${JSON.stringify(response.data)}`)

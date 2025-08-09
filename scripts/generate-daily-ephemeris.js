@@ -126,8 +126,6 @@ Ejemplo:
                     content: prompt
                 }
             ],
-            reasoning_effort: "minimal",
-            verbosity: "low",
             max_completion_tokens: 600
         });
 

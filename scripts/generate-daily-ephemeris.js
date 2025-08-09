@@ -128,7 +128,7 @@ Ejemplo:
             ],
             reasoning_effort: "minimal",
             verbosity: "low",
-            max_output_tokens: 600
+            max_completion_tokens: 600
         });
 
         if (response.status !== 200) {

@@ -115,7 +115,27 @@ Ejemplo:
                 'Content-Type': 'application/json',
             }
         }, {
-            model: 'gpt-5',
+            model: "gpt-5",
+            response_format: {
+                type: "json_schema",
+                json_schema: {
+                    name: "efemeride",
+                    strict: true,
+                    schema: {
+                        type: "object",
+                        additionalProperties: false,
+                        required: ["event", "historicalYear", "historicalMonth", "historicalDay"],
+                        properties: {
+                            event: { type: "string", minLength: 20 },
+                            historicalYear: { type: "integer" },
+                            historicalMonth: { type: "integer", const: month },
+                            historicalDay: { type: "integer", const: day }
+                        }
+                    }
+                }
+            },
+            seed: 42,
+            max_completion_tokens: 600,
             messages: [
                 {
                     role: 'system',
@@ -126,10 +146,6 @@ Ejemplo:
                     content: prompt
                 }
             ],
-            top_p: 0.9,
-            frequency_penalty: 0,
-            presence_penalty: 0,
-            max_completion_tokens: 600
         });
 
         if (response.status !== 200) {
